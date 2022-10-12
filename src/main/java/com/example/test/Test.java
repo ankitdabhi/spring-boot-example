@@ -1,9 +1,7 @@
 package com.example.test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 interface Drwable{
@@ -23,19 +21,72 @@ public class Test implements Drwable{
         data.add("test3");
         data.add("test4");
         data.add("test5");
+        System.out.println("Remove value from string");
         data.subList(2,5).clear();
         System.out.println(data);
-        Drwable d= () -> {
-        };
-        d.msg(10);
         String s="hello my name";
         String[] split = s.split("\\.");
         List<String> strings = Arrays.asList(split);
-        strings.forEach(System.out::println);
+        System.out.println("Split string by space");
+        System.out.println(strings);
         String ankit = revString("Ankit");
         System.out.println(ankit);
         System.out.println(revStringUsingStringBuilder("Ankit"));
         System.out.println(wordCapital("ankit dabhi"));
+
+        List<Product> productsList = new ArrayList<Product>();
+        //Adding Products
+        productsList.add(new Product(1,"HP Laptop",25000f));
+        productsList.add(new Product(2,"Dell Laptop",30000f));
+        productsList.add(new Product(3,"Lenevo Laptop",28000f));
+        productsList.add(new Product(4,"Sony Laptop",28000f));
+        productsList.add(new Product(5,"Apple Laptop",90000f));
+        double maxPrice= findMaxPrice(productsList);
+        System.out.println(maxPrice);
+        double minPrice= findMinPrice(productsList);
+        System.out.println(minPrice);
+        Set<Double> setData=convertListToSet(productsList);
+        setData.forEach(System.out::println);
+        Map<String,Double> listToMap=convertListToMap(productsList);
+        System.out.println(listToMap);
+    }
+
+    private static Map<String, Double> convertListToMap(List<Product> productsList) {
+        System.out.println("Convert list to map");
+        return productsList.stream().collect(Collectors.toMap(product -> product.b,product -> product.c));
+    }
+
+    private static Set<Double> convertListToSet(List<Product> productsList) {
+        System.out.println("Convert list to set");
+        return productsList.stream().map(product -> product.c).collect(Collectors.toSet());
+    }
+
+    private static double findMinPrice(List<Product> productsList) {
+        System.out.println("Find min from list");
+        Product product = productsList.stream().min((pro1, pro2) -> pro1.c > pro2.c ? 1 : -1).get();
+        return product.c;
+
+    }
+
+    private static double findMaxPrice(List<Product> productsList) {
+        System.out.println("Find max from list");
+        Product product = productsList.stream().max((pro1, pro2) -> pro1.c > pro2.c ? 1 : -1).get();
+        return product.c;
+    }
+
+    static class Product{
+        int a;
+        String b;
+        double c;
+
+        public Product() {
+        }
+
+        public Product(int a, String b, double c) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
     }
 
     @Override
@@ -49,10 +100,12 @@ public class Test implements Drwable{
         for (int i = chars.length-1; i >= 0; i--) {
             rev+=chars[i];
         }
+        System.out.println("Reverse String");
         return rev;
     }
 
     public static String revStringUsingStringBuilder(String sample){
+        System.out.println("Reverse String using StringBuilder");
         StringBuilder stringBuilder=new StringBuilder(sample);
         return stringBuilder.reverse().toString();
     }
@@ -65,6 +118,7 @@ public class Test implements Drwable{
             String afterFirst = s.substring(1);
             capitalWords+=first.toUpperCase()+afterFirst+" ";
         }
+        System.out.println("Word Capitalization");
         return capitalWords.trim();
     }
 }
